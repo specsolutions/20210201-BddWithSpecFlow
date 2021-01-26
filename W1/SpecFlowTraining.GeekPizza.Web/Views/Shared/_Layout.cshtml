@@ -1,0 +1,78 @@
+﻿@using SpecFlowTraining.GeekPizza.Web.Controllers
+@using SpecFlowTraining.GeekPizza.Web.DataAccess
+@using SpecFlowTraining.GeekPizza.Web.Services
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title - Geek Pizza</title>
+    <link type="text/css" rel="stylesheet" href="~/Content/site.css"/>
+    <script language="javascript" src="~/Content/jquery.js"></script>
+</head>
+<body>
+<div id="Header">
+	<div id="Title">
+		<h1>Geek Pizza</h1>
+		<h3>A BDD course sample application</h3>
+	</div>
+	<ul class="nav">
+		<li class="menu-button">@Html.ActionLink("Home", "Home", "Pages")</li>
+		<li class="menu-button">@Html.ActionLink("Menu", "Menu", "Pages")</li>
+		<li class="menu-button">@Html.ActionLink("My Order", "MyOrder", "Pages")</li>
+		<li class="menu-button">@Html.ActionLink("Login", "Login", "Pages")</li>
+	</ul>
+	<div id="LoginInfo">
+		@if (!AuthenticationServices.IsLoggedIn(Context))
+		{
+		    @Html.ActionLink("Not logged in", "Login", "Pages", null, new { @class = "menu-button"})
+		}
+		else
+		{
+			@:Logged in as <span id="LoggedInUser">@AuthenticationServices.GetCurrentUserName(Context)</span>
+		    @Html.ActionLink("Logout", "Logout", "Pages", null, new { @class = "menu-button" })
+		}
+	</div>
+	<div id="TestBar">
+		For testing:
+        <a href="#" onclick="resetData()">[Reset Data]</a>
+        <a href="#" onclick="defaultLogin()">[Default Login]</a>
+		@(AgentServices.IsAgentMode ? "AGENT: " + AgentServices.GetAgent() : "")
+	</div>
+</div>
+<div id="Content">
+	@RenderBody()
+</div>
+<div id="Footer">
+    <p>Copyright (c) 2017-2019, Spec Solutions, Gaspar Nagy</p>
+    <p>Learn more about our BDD courses at <a href="https://www.specsolutions.eu/services/training/" target="_blank">https://www.specsolutions.eu/services/training/</a>.</p>
+</div>
+<script language="javascript">
+    function resetData() {
+        $.ajax('@Url.Action("Home", "Pages").TrimEnd('/')/api/test/Seed', { method: 'POST' })
+            .then(
+                function success() {
+                    console.log("database has been reset");
+                    window.location.href = '@Url.Action("Home", "Pages")';
+                },
+                function fail(request) {
+                    console.log(request);
+                    alert('Request failed (' + request.status + '). ' + request.statusText);
+                }
+            );
+    }
+    function defaultLogin() {
+        $.ajax('@Url.Action("Home", "Pages").TrimEnd('/')/api/test/DefaultLogin', { method: 'POST' })
+            .then(
+                function success() {
+                    console.log("logged in with default user");
+                    window.location.href = '@Url.Action("Home", "Pages")';
+                },
+                function fail(request) {
+                    console.log(request);
+                    alert('Request failed (' + request.status + '). ' + request.statusText);
+                }
+            );
+    }
+</script>
+</body>
+</html>

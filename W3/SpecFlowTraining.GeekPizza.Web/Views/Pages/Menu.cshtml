@@ -1,0 +1,40 @@
+﻿@model SpecFlowTraining.GeekPizza.Web.Models.MenuPageModel
+
+@{
+	ViewBag.Title = "Menu";
+}
+
+<h2 class="message">Menu</h2>
+<table id="MenuTable">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Ingredients</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var menuItem in Model.MenuItems)
+		{
+			<tr data-item-name="@menuItem.Name">
+				<td class="menu-item-name">@menuItem.Name</td>
+				<td>@menuItem.Ingredients</td>
+				<td>
+					@if (Model.IsLoggedIn)
+					{
+						using (Html.BeginForm("AddToOrder", "Pages"))
+						{
+							<select name="size">
+								<option value="Small">Small</option>
+								<option value="Medium" selected="selected">Medium</option>
+								<option value="Large">Large</option>
+							</select>
+							<input type="hidden" name="menuItemName" value="@menuItem.Name" />
+							<input type="submit" value="Add to my order!" class="btn" />
+						}
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

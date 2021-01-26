@@ -1,0 +1,34 @@
+﻿@model SpecFlowTraining.GeekPizza.Web.Models.MyOrderPageModel
+
+@{
+	ViewBag.Title = "My Order";
+}
+
+<h2>My Order</h2>
+<hr/>
+<h3>Order Details</h3>
+<ul>
+	<li>Delivery Address: <span class="address" id="DeliveryAddress">@Model.MyOrder.DeliveryAddress</span></li>
+	<li>Delivery Date: <span class="date" id="DeliveryDate">@Model.MyOrder.DeliveryDate.ToString("yyyy-MM-dd")</span></li>
+	<li>Delivery Time: <span class="time" id="DeliveryTime">@Model.MyOrder.DeliveryTime.ToString("h\\:mm")</span> </li>
+	@using (Html.BeginForm("OrderDetails", "Pages", FormMethod.Get))
+	{
+		<input type="submit" value="Change" id="ChangeDetailsButton" class="btn btn-default" />
+	}
+</ul>
+<hr />
+<h3>Ordered Items</h3>
+<ul id="OrderItems">
+    @foreach (var orderItem in Model.MyOrder.OrderItems)
+    {
+        <li><span class="order-item-name">@orderItem.Name</span> (@orderItem.Size)</li>
+    }
+</ul>
+<hr />
+<h4>Subtotal: <span id="SubtotalPrice">$@Model.MyOrder.Prices.Subtotal</span></h4>
+<h4>Shipping Costs: <span id="DeliveryCosts">$@Model.MyOrder.Prices.DeliveryCosts</span></h4>
+<h3>Total Price: <span id="TotalPrice">$@Model.MyOrder.Prices.Total</span></h3>
+@using (Html.BeginForm("PlaceOrder", "Pages"))
+{
+	<input type="submit" value="Order Now!" id="PlaceOrderButton" class="btn btn-default" />
+}

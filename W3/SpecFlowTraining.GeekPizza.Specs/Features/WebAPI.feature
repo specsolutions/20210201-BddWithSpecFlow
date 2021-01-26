@@ -1,0 +1,12 @@
+﻿Feature: Web API
+
+Scenario: Menu items can be retrieved by ID
+	Given the following pizzas are on the menu
+		| # | name       | ingredients                                     | calories |
+		| 1 | Margherita | tomato slices, oregano, mozzarella              | 1920     |
+		| 2 | Fitness    | sweetcorn, broccoli, feta cheese, mozzarella    | 1340     |
+		| 3 | BBQ        | BBQ sauce, bacon, chicken breast strips, onions | 1580     |
+	When the menu item #1 is retrieved from the menu API resource by ID
+	Then the retrieved menu item should contain
+		| name       | ingredients                        | calories |
+		| Margherita | tomato slices, oregano, mozzarella | 1920     |
